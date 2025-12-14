@@ -1,0 +1,120 @@
+<!-- index.html: Главная страница. Структура сохранена. Описания в галерее изменены: Теперь они относятся к заголовкам (high-level образовательные описания типов ОМП, без деталей создания, фокус на истории/последствиях для демонстрации вёрстки с релевантным контентом). Добавлено по два абзаца на блок для ритма, как в оригинальном примере. -->
+
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>Оружие Массового Поражения — учебный сайт по вёрстке</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"> 
+  <meta name="description" content="Учебный сайт по вёрстке: главная страница, задания и курсовая работа.">
+  <link rel="stylesheet" href="base.css">
+  <link rel="stylesheet" href="components.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container site-header__bar">
+     <a href="index.html" aria-label="На главную">
+      <span class="logo" aria-hidden="true"></span></a>
+    <nav aria-label="Главное меню">
+      <ul class="nav__list">
+        <li><a class="nav__link" href="index.html" aria-current="page">Главная</a></li>
+        <li><a class="nav__link" href="assignments_index.html">Задания</a></li>
+        <li><a class="nav__link" href="coursework_index.html">Курсовая</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="container">
+      <h1 class="hero__title">Оружие Массового Поражения</h1>
+      <p class="hero__text">Учебный сайт по предмету "Вёрстка и прототипирование сайтов": демонстрация заданий по CSS, Flexbox, JS. Тема ОМП для иллюстрации контента.</p>
+      <div class="mt-6">
+        <a class="btn" href="assignments_index.html">Перейти к заданиям</a>
+        <a class="btn" href="coursework_index.html" style="margin-left:12px;">О курсовой</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>О сайте</h2>
+      <p>
+        Этот сайт создан для демонстрации навыков вёрстки: семантическая структура, адаптивность, CSS-логотип. Тема "ОМП" - для примера контента. Здесь задания по вёрстке (CSS-рисунок, анимация, JS) и курсовая - JS-игра "Электрические схемы".
+      </p>
+      <p>
+        В "Заданиях" - описания работ: рисунок CSS (грибы, бабочка), Flexbox-ролик (анимация лисы), JS-расчёт (формулы).
+      </p>
+      <p>
+        Курсовая: JS-приложение с уровнями, авторизацией, рейтингом. Сайт на Flexbox, без таблиц, адаптивный.
+      </p>
+
+  <div class="gallery" aria-label="Иллюстрации по теме">
+
+  <div class="gallery-block">
+  <img class="illustration " src="images/img1.png" alt="Схема ядерного оружия">
+  <h3 class="gallery-title">Схема ядерного оружия</h3>
+  <p>Ядерное оружие основано на цепной реакции деления или синтеза ядер атомов, высвобождая огромную энергию в виде взрыва, тепла и радиации. Разработано в середине XX века, оно изменило глобальную политику.</p>
+  <p>Примеры: Атомные бомбы, сброшенные на Хиросиму и Нагасаки в 1945 году, продемонстрировали разрушительную силу, приведшую к тысячам жертв и долгосрочным последствиям для здоровья.</p>
+  </div>
+
+  <div class="gallery-block">
+  <img class="illustration " src="images/img2.png" alt="Химическое оружие">
+  <h3 class="gallery-title">Химическое оружие</h3>
+  <p>Химическое оружие использует токсичные вещества для поражения людей, животных или растений, вызывая отравление через кожу, дыхание или пищеварение. Запрещено международными конвенциями.</p>
+  <p>Исторический пример: Газы вроде иприта и зарина применялись в Первой мировой войне и в конфликтах XX века, вызывая массовые страдания и экологический ущерб.</p>
+  </div>
+
+<div class="gallery-block">
+  <img class="illustration " src="images/img3.png" alt="Биологическое оружие">
+  <h3 class="gallery-title">Биологическое оружие</h3>
+  <p>Биологическое оружие включает патогены, такие как бактерии, вирусы или токсины, для распространения болезней. Оно трудно контролируемо и может вызвать пандемии.</p>
+  <p>Примеры: В истории использовались споры сибирской язвы или чумы; сегодня фокус на предотвращении через биобезопасность и договоры о запрете.</p>
+</div>
+
+<div class="gallery-block">
+  <img class="illustration " src="images/img4.png" alt="Радиологическое оружие">
+  <h3 class="gallery-title">Радиологическое оружие</h3>
+  <p>Радиологическое оружие, или "грязная бомба", сочетает взрывчатку с радиоактивными материалами для загрязнения территории, вызывая панику и долгосрочные риски здоровья.</p>
+  <p>Не вызывает ядерный взрыв, но распространяет радиацию; примеры угроз включают сценарии терроризма, подчеркивая необходимость контроля над радиоактивными источниками.</p>
+</div>
+
+</div>
+
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>Разделы сайта</h2>
+      <div class="row mt-6">
+        <div class="card">
+          <h3>Задания</h3>
+          <p class="mt-6">Задания по вёрстке: CSS, Flexbox, JS.</p>
+          <p class="mt-6"><a class="btn" href="assignments_index.html">Открыть</a></p>
+        </div>
+        <div class="card">
+          <h3>Курсовая</h3>
+          <p class="mt-6">JS-игра "Электрические схемы".</p>
+          <p class="mt-6"><a class="btn" href="coursework_index.html">Открыть</a></p>
+        </div>
+        <div class="card">
+          <h3>Информация о сайте</h3>
+          <p class="mt-6">Вернуться наверх</p>
+          <p class="mt-6"><a class="btn" href="#top">Наверх</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    © 2025 Учебный сайт по вёрстке. Главная страница.
+  </div>
+</footer>
+
+</body>
+</html>
