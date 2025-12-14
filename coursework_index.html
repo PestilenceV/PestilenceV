@@ -1,0 +1,66 @@
+<!-- coursework_index.html: Раздел курсовой. Адаптирован под задание: Игра "Электрические схемы". Карточки: Цель/задачи, Ход работы, Источники. Подробное описание требований в тексте. -->
+
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>Оружие Массового Поражения — Курсовая</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Курсовая по вёрстке и прототипированию.">
+  <link rel="stylesheet" href="base.css">
+  <link rel="stylesheet" href="components.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container site-header__bar">
+    <a href="index.html" aria-label="На главную">
+      <span class="logo" aria-hidden="true"></span></a>
+    <nav aria-label="Главное меню">
+      <ul class="nav__list">
+        <li><a class="nav__link" href="index.html">Главная</a></li>
+        <li><a class="nav__link" href="assignments_index.html">Задания</a></li>
+        <li><a class="nav__link" href="coursework_index.html" aria-current="page">Курсовая</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="section">
+    <div class="container">
+      <h1>Курсовая работа</h1>
+      <p class="text-muted">Тема: Разработка игрового приложения "Электрические схемы" на JS.</p>
+
+      <div class="row mt-6">
+        <div class="card">
+          <h3>Цель и задачи</h3>
+          <p class="mt-6">Цель: Создать JS-приложение для изучения электрических схем. Задачи: Определить элементы (реле, лампочки, резисторы), подобрать формулы, собрать схемы. Идеи: Собрать цепь (эффект при успехе, ограниченные попытки), расставить светодиоды, расчёт по формулам.</p>
+        </div>
+
+        <div class="card">
+          <h3>Ход работы</h3>
+          <p class="mt-6">Модуль Game_LastName_GameTitle. Миниавторизация (имя). Рейтинг. 3 уровня (3-5 вопросов каждый, генерация). События: Перемещение, клик, наведение. Время, ускорение, баллы (штрафы). Динамика элементов, анимация. LocalStorage для данных. 3 страницы: Заставка, игра, рейтинг. На хостинге.</p>
+        </div>
+
+        <div class="card">
+          <h3>Источники</h3>
+          <p class="mt-6">JS-документация, ресурсы по электрике (формулы, схемы). Графические библиотеки (если не влияют на локальную работу).</p>
+        </div>
+      </div>
+
+      <hr>
+
+    
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    © 2025 Учебный сайт по вёрстке. Раздел «Курсовая».
+  </div>
+</footer>
+
+</body>
+</html>
