@@ -13,8 +13,8 @@ const GameConfig = {
     },
     
     LEVELS: {
-        1: { type: 'assembly', questions: 1, description: 'Сборка схем' },
-        2: { type: 'calculation', questions: 2, description: 'Расчеты цепей' },
+        1: { type: 'assembly', questions: 3, description: 'Сборка схем' },
+        2: { type: 'calculation', questions: 3, description: 'Расчеты цепей' },
         3: { type: 'error-finding', questions: 3, description: 'Поиск ошибок в схемах' }
     }
 };
@@ -1022,5 +1022,6 @@ class ElectricSchemesGame {
         }
     }
 }
+
 
 window.ElectricSchemesGame = ElectricSchemesGame;
