@@ -1,0 +1,305 @@
+/* Сброс стандартных отступов и использование border-box для всех элементов */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Основные стили для body */
+body {
+    font-family: Arial, sans-serif;  /* Шрифт без засечек */
+    background-color: #f5f5f5;       /* Светло-серый фон */
+    padding: 20px;                   /* Отступы по краям */
+}
+
+/* Основной контейнер для центрирования содержимого */
+.container {
+    max-width: 1200px;               /* Максимальная ширина контейнера */
+    margin: 0 auto;                  /* Автоматические отступы по бокам для центрирования */
+}
+
+/* Основная секция, содержащая блоки 1 и 2 */
+.main-section {
+    display: flex;                   /* Используем Flexbox для расположения в строку */
+    gap: 20px;                       /* Расстояние между блоками */
+    min-height: 500px;               /* Минимальная высота секции */
+}
+
+/* Общие стили для всех блоков (1, 2 и зоны перетаскивания) */
+.block {
+    background: white;               /* Белый фон */
+    border: 2px solid #ddd;          /* Серая рамка */
+    border-radius: 0;                /* Без скругления углов */
+    padding: 15px;                   /* Внутренние отступы */
+}
+
+/* Стили для блока 2 (левая панель с элементами) */
+.block-2 {
+    width: 200px;                    /* Фиксированная ширина */
+    flex-shrink: 0;                  /* Запрет на уменьшение ширины при сжатии */
+}
+
+/* Стили для заголовков блоков (цифры 1, 2, 3) */
+.block-title {
+    font-size: 48px;                 /* Большой размер шрифта */
+    font-weight: bold;               /* Жирное начертание */
+    color: #4CAF50;                  /* Зеленый цвет */
+    text-align: center;              /* Выравнивание по центру */
+    margin-bottom: 20px;             /* Отступ снизу */
+}
+
+/* Контейнер для элементов в блоке 2 */
+.elements-container {
+    display: flex;                   /* Flexbox для вертикального расположения */
+    flex-direction: column;          /* Элементы в колонку */
+    gap: 10px;                       /* Расстояние между элементами */
+    justify-content: flex-end;       /* Выравнивание элементов внизу контейнера */
+    min-height: 300px;               /* Минимальная высота контейнера */
+}
+
+/* Общие стили для элементов (прямоугольных блоков) */
+.element {
+    padding: 10px 15px;              /* Внутренние отступы */
+    border-radius: 0;                /* Без скругления углов */
+    cursor: move;                    /* Курсор "перетаскивание" при наведении */
+    user-select: none;               /* Запрет выделения текста */
+    transition: all 0.3s ease;       /* Плавные переходы для всех свойств */
+    text-align: center;              /* Выравнивание текста по центру */
+    font-size: 13px;                 /* Размер шрифта */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);  /* Легкая тень для эффекта глубины */
+}
+
+/* Эффект при наведении на элемент */
+.element:hover {
+    transform: translateY(-2px);     /* Легкий подъем элемента */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15); /* Усиление тени при наведении */
+}
+
+/* Стиль для элемента во время перетаскивания */
+.element.dragging {
+    opacity: 0.5;                    /* Полупрозрачность при перетаскивании */
+}
+
+/* Правая секция, содержащая только блок 1 */
+.right-section {
+    flex: 1;                         /* Занимает все доступное пространство */
+    display: flex;                   /* Flexbox для расположения содержимого */
+    flex-direction: column;          /* Вертикальное направление */
+    gap: 20px;                       /* Расстояние между элементами */
+}
+
+/* Стили для блока 1 (красное поле отображения) */
+.block-1 {
+    flex: 1;                         /* Занимает все доступное пространство в родителе */
+}
+
+/* Верхняя часть блока 1 с полем ввода и кнопкой */
+.block-header {
+    background: #e0e0e0;             /* Светло-серый фон */
+    padding: 10px 15px;              /* Внутренние отступы */
+    border-radius: 0;                /* Без скругления углов */
+    margin-bottom: 15px;             /* Отступ снизу */
+    display: flex;                   /* Flexbox для расположения элементов в строку */
+    justify-content: space-between;  /* Распределение элементов по ширине */
+    align-items: center;             /* Вертикальное выравнивание по центру */
+}
+
+/* Стили для поля ввода текста */
+#inputField {
+    flex: 1;                         /* Занимает все доступное пространство */
+    border: none;                    /* Без рамки */
+    background: transparent;         /* Прозрачный фон */
+    color: #333;                     /* Темно-серый цвет текста */
+    font-size: 14px;                 /* Размер шрифта */
+    outline: none;                   /* Убираем стандартный контур при фокусе */
+}
+
+/* Стили для кнопки "Разобрать" */
+#parseBtn {
+    background: #4CAF50;             /* Зеленый фон */
+    color: white;                    /* Белый текст */
+    border: none;                    /* Без рамки */
+    padding: 8px 20px;               /* Внутренние отступы */
+    border-radius: 0;                /* Без скругления углов */
+    cursor: pointer;                 /* Курсор "указатель" при наведении */
+    font-size: 14px;                 /* Размер шрифта */
+    transition: background 0.3s;     /* Плавный переход цвета фона */
+}
+
+/* Эффект при наведении на кнопку */
+#parseBtn:hover {
+    background: #45a049;             /* Темно-зеленый фон при наведении */
+}
+
+/* Эффект при нажатии на кнопку */
+#parseBtn:active {
+    background: #3d8b40;             /* Еще более темный зеленый при нажатии */
+}
+
+/* Область для отображения результатов (красная зона) */
+.display-area {
+    background: #ff6b6b;             /* Красный фон */
+    border-radius: 0;                /* Без скругления углов */
+    padding: 20px;                   /* Внутренние отступы */
+    min-height: 120px;               /* Минимальная высота */
+    display: flex;                   /* Flexbox для центрирования содержимого */
+    align-items: center;             /* Вертикальное центрирование */
+    justify-content: center;         /* Горизонтальное центрирование */
+    color: white;                    /* Белый текст */
+    font-size: 16px;                 /* Размер шрифта */
+    font-weight: bold;               /* Жирное начертание */
+    text-align: center;              /* Выравнивание текста по центру */
+}
+
+/* Стили для подсказки в красной области */
+.hint {
+    font-size: 13px;                 /* Небольшой размер шрифта */
+    line-height: 1.6;                /* Межстрочный интервал */
+    color: white;                    /* Белый цвет текста */
+}
+
+/* Стили для отображаемого текста в красной области */
+.display-text {
+    font-size: 18px;                 /* Размер шрифта */
+    font-weight: bold;               /* Жирное начертание */
+}
+
+/* Стили для синей зоны перетаскивания (блок 3) */
+.drop-zone {
+    min-height: 300px;               /* Минимальная высота зоны */
+    border: 2px dashed #0000ff;      /* Синяя пунктирная рамка */
+    border-radius: 0;                /* Без скругления углов */
+    padding: 20px;                   /* Внутренние отступы */
+    background: lightblue;           /* Светло-синий фон */
+    position: relative;              /* Для позиционирования дочерних элементов */
+    display: flex;                   /* Flexbox для расположения элементов */
+    flex-wrap: wrap;                 /* Перенос элементов на новую строку */
+    gap: 10px;                       /* Расстояние между элементами */
+    align-content: flex-end;         /* Выравнивание элементов внизу контейнера */
+}
+
+/* Стиль при перетаскивании элемента над зоной */
+.drop-zone.drag-over {
+    background: #a0c4ff;             /* Более темный синий фон */
+    border-color: #0000cd;           /* Более темная синяя рамка */
+}
+
+/* Водяной знак с цифрой 3 в центре синей зоны */
+.drop-label {
+    position: absolute;              /* Абсолютное позиционирование */
+    top: 50%;                        /* Позиционирование по вертикали */
+    left: 50%;                       /* Позиционирование по горизонтали */
+    transform: translate(-50%, -50%); /* Центрирование элемента */
+    font-size: 72px;                 /* Очень большой размер шрифта */
+    color: #4CAF50;                  /* Зеленый цвет */
+    font-weight: bold;               /* Жирное начертание */
+    opacity: 0.2;                    /* Полупрозрачность */
+    pointer-events: none;            /* Игнорирование событий мыши */
+}
+
+/* Скрытие водяного знака, если в зоне есть элементы */
+.drop-zone:has(.element) .drop-label {
+    display: none;                   /* Скрываем водяной знак */
+}
+
+/* Стили для элементов в синей зоне перетаскивания */
+.drop-zone .element {
+    position: absolute;              /* Абсолютное позиционирование для свободного размещения */
+    cursor: pointer;                 /* Курсор "указатель" для кликабельных элементов */
+}
+
+/* Анимация появления элементов */
+@keyframes fadeIn {
+    from {
+        opacity: 0;                  /* Начало: полностью прозрачный */
+        transform: scale(0.8);       /* Начало: уменьшенный размер */
+    }
+    to {
+        opacity: 1;                  /* Конец: полностью непрозрачный */
+        transform: scale(1);         /* Конец: нормальный размер */
+    }
+}
+
+/* Применение анимации к элементам */
+.element {
+    animation: fadeIn 0.3s ease;     /* Анимация появления за 0.3 секунды */
+}
+
+/* Адаптивные стили для мобильных устройств */
+@media (max-width: 768px) {
+    /* На мобильных устройствах меняем направление основной секции на вертикальное */
+    .main-section {
+        flex-direction: column;      /* Вертикальное расположение блоков */
+    }
+
+    /* Блок 2 занимает всю ширину на мобильных */
+    .block-2 {
+        width: 100%;                 /* Полная ширина */
+    }
+}
+
+/* Стили для кнопки возврата на главную страницу */
+.back-to-main {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, var(--primary, #ff5252), #c62828);
+    color: white;
+    text-decoration: none;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(255, 82, 82, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    z-index: 1000;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.back-to-main:hover {
+    background: linear-gradient(135deg, #c62828, var(--primary, #ff5252));
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(255, 82, 82, 0.4);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.back-to-main:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(255, 82, 82, 0.3);
+}
+
+.back-to-main::before {
+    content: "←";
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* Адаптив для мобильных устройств */
+@media (max-width: 768px) {
+    .back-to-main {
+        top: 10px;
+        left: 10px;
+        padding: 8px 16px;
+        font-size: 12px;
+    }
+}
+
+/* Анимация появления */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.back-to-main {
+    animation: fadeInDown 0.5s ease-out;
+}

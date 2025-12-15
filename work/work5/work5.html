@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Разбор строки - Вариант 2</title>
+    
+    <!-- Подключение внешних CSS файлов -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Кнопка для возврата на главную страницу -->
+    <a href="../../index.html" class="back-to-main">
+        На главную
+    </a>
+
+    <!-- Основной контейнер для центрирования содержимого -->
+    <div class="container">
+        
+        <!-- Секция 3: Синяя зона для перетаскивания элементов -->
+        <div class="drop-zone" id="dropZone">
+            <!-- Водяной знак с цифрой 3 в центре зоны -->
+            <div class="drop-label">3</div>
+            <!-- Элементы будут добавляться сюда при перетаскивании -->
+        </div>
+
+        <!-- Основная рабочая область (секции 1 и 2) -->
+        <div class="main-section">
+            
+            <!-- Секция 2: Левая панель с элементами после разбора строки -->
+            <div class="block block-2" id="block2">
+                <!-- Заголовок блока с цифрой 2 -->
+                <div class="block-title">2</div>
+                
+                <!-- Контейнер для динамически создаваемых элементов -->
+                <div class="elements-container" id="elementsContainer">
+                    <!-- Здесь будут появляться элементы после разбора строки -->
+                </div>
+            </div>
+
+            <!-- Секция 1: Правая панель с вводом строки и отображением результата -->
+            <div class="block block-1" id="block1">
+                
+                <!-- Верхняя часть блока с полем ввода и кнопкой -->
+                <div class="block-header">
+                    <!-- Поле для ввода строки, которую нужно разобрать -->
+                    <input type="text" id="inputField" 
+                           placeholder="Введите строку (например: лес - бочка - 20 – бык - крик - 3 -Бок)">
+                    
+                    <!-- Кнопка для запуска процесса разбора строки -->
+                    <button id="parseBtn">Разобрать</button>
+                </div>
+                
+                <!-- Область для отображения результатов -->
+                <div class="display-area" id="displayArea">
+                    <!-- Подсказка по умолчанию, пока не выбран элемент -->
+                    <span class="hint">Нажмите на элемент<br>в синем блоке</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Подключение внешнего JavaScript файла -->
+    <script src="script.js"></script>
+</body>
+</html>
