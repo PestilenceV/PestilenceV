@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Электрические схемы - Заставка</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="splash-screen">
+        <div class="splash-content">
+            <div class="game-logo">
+                <div class="circuit-icon">
+                    <div class="wire"></div>
+                    <div class="bulb">
+                        <div class="filament"></div>
+                    </div>
+                    <div class="battery"></div>
+                </div>
+                <h1>Электрические <span class="highlight">Схемы</span></h1>
+            </div>
+
+            <div class="auth-form">
+                <h2>Вход в игру</h2>
+                <div class="input-group">
+                    <label for="playerName">Введите ваше имя:</label>
+                    <input type="text" 
+                           id="playerName" 
+                           placeholder="Игрок"
+                           maxlength="20"
+                           autocomplete="off">
+                </div>
+
+                <div class="action-buttons">
+                    <button id="startGameBtn" class="btn-primary">
+                        Начать игру
+                    </button>
+                    <button id="showRulesBtn" class="btn-secondary">
+                        Правила игры
+                    </button>
+                    <button id="showRatingBtn" class="btn-secondary">
+                        Таблица рейтинга
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="rulesModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Правила игры</h2>
+                    <button class="close-btn">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <h3>Цель игры</h3>
+                    <p>Собрать электрические схемы и решить задачи по электротехнике.</p>
+                    
+                    <h3>Уровни игры</h3>
+                    <ul>
+                        <li><strong>Уровень 1:</strong> Сборка простых схем</li>
+                        <li><strong>Уровень 2:</strong> Расчет параметров цепей</li>
+                        <li><strong>Уровень 3:</strong> Поиск ошибок в схемах</li>
+                    </ul>
+                    
+                    <h3>Система баллов</h3>
+                    <ul>
+                        <li>Правильный ответ: +100 баллов</li>
+                        <li>Неправильный ответ: -10 баллов</li>
+                        <li>Использование подсказки: -20 баллов</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/storage.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const playerNameInput = document.getElementById('playerName');
+            const startGameBtn = document.getElementById('startGameBtn');
+            const showRulesBtn = document.getElementById('showRulesBtn');
+            const showRatingBtn = document.getElementById('showRatingBtn');
+            const rulesModal = document.getElementById('rulesModal');
+            const closeModalBtn = document.querySelector('.close-btn');
+            
+            startGameBtn.addEventListener('click', function() {
+                const playerName = playerNameInput.value.trim();
+                if (!playerName) {
+                    alert('Пожалуйста, введите имя!');
+                    return;
+                }
+                
+                localStorage.setItem('playerName', playerName);
+                window.location.href = 'game.html';
+            });
+            
+            showRulesBtn.addEventListener('click', function() {
+                rulesModal.style.display = 'flex';
+            });
+            
+            showRatingBtn.addEventListener('click', function() {
+                window.location.href = 'rating.html';
+            });
+            
+            closeModalBtn.addEventListener('click', function() {
+                rulesModal.style.display = 'none';
+            });
+            
+            window.addEventListener('click', function(event) {
+                if (event.target === rulesModal) {
+                    rulesModal.style.display = 'none';
+                }
+            });
+            
+            const savedName = localStorage.getItem('playerName');
+            if (savedName) {
+                playerNameInput.value = savedName;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Электрические схемы - Игра</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="game-container">
+        <header class="game-header">
+            <div class="player-info">
+                <div class="player-name" id="playerNameDisplay">Игрок</div>
+                <div class="level-indicator">Уровень: <span id="currentLevel">1</span></div>
+            </div>
+            
+            <div class="game-stats">
+                <div class="stat">
+                    <div class="stat-label">Время</div>
+                    <div class="stat-value" id="timer">05:00</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Баллы</div>
+                    <div class="stat-value" id="score">0</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Попытки</div>
+                    <div class="stat-value" id="attempts">3</div>
+                </div>
+            </div>
+            
+            <div class="game-controls">
+                <button id="pauseBtn" class="control-btn" title="Пауза">
+                    ⏸️
+                </button>
+                <button id="quitBtn" class="control-btn danger" title="Выйти">
+                    🚪
+                </button>
+            </div>
+        </header>
+
+        <main class="game-main">
+            <div class="elements-panel">
+                <h3>📦 Доступные элементы</h3>
+                <div class="elements-grid" id="elementsGrid">
+                </div>
+                
+                <div class="formulas-panel">
+                    <h3>📐 Формулы</h3>
+                    <div class="formulas-list" id="formulasList">
+                        <div class="formula-item">
+                            <div class="formula-name">Закон Ома</div>
+                            <div class="formula">I = U / R</div>
+                        </div>
+                        <div class="formula-item">
+                            <div class="formula-name">Мощность</div>
+                            <div class="formula">P = U × I</div>
+                        </div>
+                        <div class="formula-item">
+                            <div class="formula-name">Последовательное соединение</div>
+                            <div class="formula">Rобщ = R₁ + R₂</div>
+                        </div>
+                        <div class="formula-item">
+                            <div class="formula-name">Параллельное соединение</div>
+                            <div class="formula">1/Rобщ = 1/R₁ + 1/R₂</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="workspace">
+                <div class="task-header">
+                    <h3 id="taskTitle">Задание</h3>
+                    <div class="task-description" id="taskDescription">
+                    </div>
+                </div>
+                
+                <div class="circuit-area">
+                    <div class="drop-zone" id="dropZone">
+                        <div class="grid-lines"></div>
+                    </div>
+                    <div class="circuit-elements" id="circuitElements"></div>
+                </div>
+                
+                <div class="control-panel">
+                    <button id="checkBtn" class="btn-primary">
+                        Проверить
+                    </button>
+                    <button id="resetBtn" class="btn-secondary">
+                        Сбросить
+                    </button>
+                </div>
+                
+                <div class="question-panel">
+                    <div class="question-text" id="questionText">
+                    </div>
+                    
+                    <div class="answer-area" id="answerArea">
+                    </div>
+                    
+                    <div class="feedback" id="feedback"></div>
+                </div>
+            </div>
+
+            <div class="info-panel">
+                <div class="level-info">
+                    <h3>📊 Текущий уровень</h3>
+                    <div class="info-content" id="levelInfo">
+                        Уровень <span id="currentLevelDisplay">1</span>
+                    </div>
+                    <div class="question-counter" id="questionCounter">
+                        Вопрос: 1/5
+                    </div>
+                </div>
+                
+                <div class="hints-panel">
+                    <h3>💡 Подсказки</h3>
+                    <div class="hints-list" id="hintsList">
+                    </div>
+                    <button id="hintBtn" class="btn-secondary hint-button">
+                        Получить подсказку (-20 баллов)
+                    </button>
+                </div>
+                
+                <div class="action-panel">
+                    <button id="finishGameBtn" class="btn-danger">
+                        Завершить игру
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <footer class="game-footer">
+            <div class="message-area" id="messageArea">
+            </div>
+        </footer>
+    </div>
+
+    <div id="pauseModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>⏸️ Игра на паузе</h2>
+            </div>
+            <div class="modal-body">
+                <p>Игра приостановлена</p>
+            </div>
+            <div class="modal-footer">
+                <button id="resumeBtn" class="btn-primary">Продолжить</button>
+                <button id="quitToMenuBtn" class="btn-secondary">Выйти в меню</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="levelCompleteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🎉 Уровень пройден!</h2>
+            </div>
+            <div class="modal-body">
+                <div class="result-item">
+                    <span>Баллы за уровень:</span>
+                    <span id="levelScore">0</span>
+                </div>
+                <div class="result-item">
+                    <span>Правильных ответов:</span>
+                    <span id="correctAnswers">0</span>
+                </div>
+                <div class="result-item">
+                    <span>Время:</span>
+                    <span id="levelTime">00:00</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="nextLevelBtn" class="btn-primary">Следующий уровень</button>
+                <button id="finishGameFromModalBtn" class="btn-danger">Завершить игру</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/storage.js"></script>
+    <script src="js/elements.js"></script>
+    <script src="js/formulas.js"></script>
+    <script src="js/game-module.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const game = new ElectricSchemesGame();
+            game.init();
+        });
+    </script>
+</body>
+</html>
