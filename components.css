@@ -1,40 +1,42 @@
-/* components.css: Адаптировано для тёмной темы: Фоны, hover, логотип-ядерный гриб. */
 
-/* ===== HEADER ===== */
 .site-header { 
-  border-bottom: 1px solid var(--border); 
-  background: var(--bg); 
+    border-bottom: 1px solid var(--border); 
+    background: var(--bg); 
+    position: sticky; 
+    top: 0;
+    z-index: 100;
 }
+
 
 .site-header__bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: var(--space-4) 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-4) 0;
 }
 
-/* ===== NAVIGATION ===== */
 .nav__list { 
-  list-style: none;
-  display: flex;
-  gap: var(--space-6);
+    list-style: none;
+    display: flex;
+    gap: var(--space-6);
 }
 
 .nav__link { 
-  padding: 6px 10px;
-  border-radius: 6px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    transition: background-color 0.2s ease; 
 }
 
 .nav__link:hover { 
-  background: #333333; 
+    background: #333333; 
 }
 
 .nav__link[aria-current="page"] {
-  background: #2e2e2e;
-  color: #ff5252;
+    background: #2e2e2e;
+    color: var(--primary); 
 }
 
-/* ===== ЛОГОТИП: ЯДЕРНЫЙ ГРИБ ===== */
+
 .logo {
   --size: 48px;
   --fire-color: #ff5252;      /* Красный для огня */
@@ -54,22 +56,22 @@
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: calc(var(--size) * 0.2); /* 20% от размера */
-  height: calc(var(--size) * 0.4); /* 40% от размера */
+  width: calc(var(--size) * 0.2); 
+  height: calc(var(--size) * 0.4); 
   background: linear-gradient(to top, var(--stem-color), #8b0000);
   border-radius: 4px 4px 0 0;
   z-index: 2;
 }
 
-/* Шляпка гриба (огненный шар) */
+/* Шляпка гриба */
 .logo::after {
   content: "";
   position: absolute;
-  bottom: calc(var(--size) * 0.4); /* Начинается над ножкой */
+  bottom: calc(var(--size) * 0.4); 
   left: 50%;
   transform: translateX(-50%);
-  width: calc(var(--size) * 0.6); /* 60% от размера */
-  height: calc(var(--size) * 0.5); /* 50% от размера */
+  width: calc(var(--size) * 0.6); 
+  height: calc(var(--size) * 0.5); 
   background: radial-gradient(
     circle at 30% 30%,
     #ffcc00 0%,
@@ -84,7 +86,7 @@
   z-index: 3;
 }
 
-/* Анимированный дым над грибом */
+
 .logo::after::before {
   content: "";
   position: absolute;
@@ -105,7 +107,7 @@
   z-index: 1;
 }
 
-/* Анимация дыма */
+
 @keyframes smoke-rise {
   0%, 100% {
     transform: translateX(-50%) translateY(0);
@@ -119,7 +121,6 @@
   }
 }
 
-/* Эффект при наведении */
 .logo:hover::before {
   filter: brightness(1.2);
   transition: filter 0.3s ease;
@@ -134,7 +135,6 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Варианты размеров */
 .logo--sm { 
   --size: 32px; 
 }
@@ -143,7 +143,7 @@
   --size: 64px; 
 }
 
-/* ===== HERO SECTION ===== */
+
 .hero {
   padding: var(--space-8) 0;
 }
@@ -157,131 +157,138 @@
   max-width: 70ch;
 }
 
-/* ===== CARD GRID ===== */
 .row {
-  display: flex;
-  gap: var(--space-6);
+    display: flex;
+    gap: var(--space-6);
+    flex-wrap: wrap; 
 }
 
-/* ===== CARDS ===== */
 .card {
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 0;
-  background: var(--card);
-  border: 1px solid var(--card-border);
-  border-radius: 16px;
-  padding: var(--space-6);
-  color: inherit;
-  text-decoration: none;
-  transition: 
-    transform .12s ease,
-    border-color .15s ease,
-    box-shadow .15s ease;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 300px; 
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: var(--space-6);
+    color: inherit;
+    text-decoration: none;
+    transition: all 0.2s ease; 
 }
+
+
+a.card {
+    cursor: pointer;
+}
+
 
 .card > :last-child { 
-  margin-top: auto;
-  padding-top: var(--space-6);
+    margin-top: auto;
+    padding-top: var(--space-6);
 }
+
 
 .card:hover {
-  transform: translateY(-1px);
-  border-color: var(--card-border);
-  box-shadow:
-    0 0 0 2px rgba(255, 82, 82, .25),
-    0 6px 14px rgba(255, 82, 82, .06);
+    transform: translateY(-4px); 
+    border-color: var(--primary);
+    box-shadow: 
+        0 8px 25px rgba(255, 82, 82, 0.15),
+        0 0 0 1px rgba(255, 82, 82, 0.1);
 }
+
 
 .card:focus-visible {
-  outline: 0;
-  box-shadow:
-    0 0 0 3px rgba(255, 82, 82, .35),
-    0 6px 14px rgba(255, 82, 82, .06);
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
 }
 
-/* ===== GALLERY ===== */
+
 .gallery {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-6);
-  margin-top: var(--space-8);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    margin-top: var(--space-8);
 }
 
 .gallery-block {
-  background: var(--card);
-  border: 1px solid var(--card-border);
-  border-radius: 16px;
-  padding: var(--space-6);
-  overflow: hidden;
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: var(--space-6);
+    overflow: hidden;
 }
 
 .gallery-title {
-  font-size: 18px;
-  line-height: 1.4;
-  margin-bottom: var(--space-2);
+    font-size: 18px;
+    line-height: 1.4;
+    margin-bottom: var(--space-2);
 }
+
 
 .illustration {
-  width: 300px;
-  height: 300px;
-  object-fit: cover;
-  border-radius: 12px;
-  border: 1px solid var(--border);
-  display: block;
-  float: right;
-  margin: var(--space-2) 0 var(--space-4) var(--space-4);
+    width: 300px;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    float: right; 
+    margin: var(--space-2) 0 var(--space-4) var(--space-4);
 }
 
-/* ===== FOOTER ===== */
 .site-footer {
-  border-top: 1px solid var(--border);
-  padding: var(--space-6) 0;
-  color: var(--muted);
-  font-size: 14px;
+    border-top: 1px solid var(--border);
+    padding: var(--space-6) 0;
+    color: var(--muted);
+    font-size: 14px;
+    text-align: center;
 }
 
-/* ===== RESPONSIVE DESIGN ===== */
+
 @media (max-width: 768px) {
-  .site-header__bar {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-3);
-  }
+  
+    .site-header__bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-3);
+    }
 
-  .nav__list {
-    gap: var(--space-3);
-    flex-wrap: wrap;
-  }
 
-  .row {
-    flex-direction: column;
-    gap: var(--space-4);
-  }
+    .nav__list {
+        gap: var(--space-3);
+        flex-wrap: wrap;
+    }
 
-  .card {
-    flex: 1 1 auto;
-  }
+  
+    .row {
+        flex-direction: column;
+        gap: var(--space-4);
+    }
 
-  .gallery {
-    display: block;
-  }
+    .card {
+        flex: 1 1 auto; 
+    }
 
-  .gallery-block {
-    margin-bottom: var(--space-6);
-    padding: var(--space-4);
-  }
+  
+    .gallery {
+        display: block;
+    }
 
-  .illustration {
-    float: none;
-    display: block;
-    margin: 0 auto var(--space-3);
-    width: 100%;
-    max-width: 320px;
-    height: auto;
-  }
+    .gallery-block {
+        margin-bottom: var(--space-6);
+        padding: var(--space-4);
+    }
 
-  .gallery-title {
-    text-align: left;
-  }
+ 
+    .illustration {
+        float: none;
+        display: block;
+        margin: 0 auto var(--space-3);
+        width: 100%;
+        max-width: 320px;
+        height: auto;
+    }
+
+    .gallery-title {
+        text-align: center; 
+    }
 }
