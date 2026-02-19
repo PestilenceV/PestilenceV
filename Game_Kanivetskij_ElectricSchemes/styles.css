@@ -1,4 +1,3 @@
-/* СБРОС СТИЛЕЙ */
 * {
     margin: 0;
     padding: 0;
@@ -253,6 +252,8 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
 }
 
 .game-header {
@@ -262,6 +263,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-shrink: 0;
 }
 
 .player-info {
@@ -333,6 +335,7 @@ body {
     display: flex;
     padding: 20px 30px;
     gap: 20px;
+    min-height: 0;
 }
 
 .elements-panel {
@@ -341,6 +344,7 @@ body {
     border-radius: 10px;
     padding: 20px;
     overflow-y: auto;
+    flex-shrink: 0;
 }
 
 .elements-panel h3 {
@@ -419,10 +423,12 @@ body {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 10px;
     padding: 20px;
+    min-height: 0;
 }
 
 .task-header {
     margin-bottom: 20px;
+    flex-shrink: 0;
 }
 
 .task-header h3 {
@@ -439,8 +445,9 @@ body {
     background: rgba(0, 0, 0, 0.2);
     border-radius: 10px;
     position: relative;
-    min-height: 300px;
+    min-height: 200px;
     margin-bottom: 20px;
+    overflow: hidden;
 }
 
 .drop-zone {
@@ -472,12 +479,16 @@ body {
     display: flex;
     gap: 15px;
     margin-bottom: 20px;
+    flex-shrink: 0;
 }
 
 .question-panel {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 10px;
     padding: 15px;
+    flex-shrink: 0;
+    overflow-y: auto;      
+    max-height: 100%;     
 }
 
 .question-text {
@@ -519,12 +530,15 @@ body {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    overflow-y: auto;
+    flex-shrink: 0;
 }
 
 .level-info {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 8px;
     padding: 15px;
+    flex-shrink: 0;
 }
 
 .level-info h3 {
@@ -545,6 +559,7 @@ body {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 8px;
     padding: 15px;
+    flex-shrink: 0;
 }
 
 .hints-panel h3 {
@@ -572,12 +587,14 @@ body {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    flex-shrink: 0;
 }
 
 .game-footer {
     padding: 15px 30px;
     background: rgba(0, 0, 0, 0.3);
     border-top: 1px solid rgba(255, 255, 255, 0.1);
+    flex-shrink: 0;
 }
 
 .message-area {
@@ -981,185 +998,16 @@ body {
     animation: bulb-blink 1s infinite;
 }
 
-/* АДАПТИВНОСТЬ */
-@media (max-width: 768px) {
-    .game-main {
-        flex-direction: column;
-    }
-    
-    .elements-panel, .info-panel {
-        width: 100%;
-        max-height: 200px;
-    }
-    
-    .game-stats {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-    }
-    
-    .stat {
-        min-width: auto;
-    }
-    
-    .rating-controls {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    
-    .rating-table {
-        display: block;
-        overflow-x: auto;
-    }
-    
-    .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .circuit-element {
-        min-width: 70px;
-        min-height: 70px;
-    }
-    
-    .element-icon {
-        font-size: 28px;
-    }
-    
-    #calculationAnswer {
-        font-size: 14px;
-        padding: 10px;
-    }
-}
-
-@media (max-width: 480px) {
-    .game-logo h1 {
-        font-size: 36px;
-    }
-    
-    .game-header {
-        flex-direction: column;
-        gap: 15px;
-    }
-    
-    .game-controls {
-        width: 100%;
-        justify-content: space-between;
-    }
-    
-    .control-btn {
-        flex: 1;
-        border-radius: 8px;
-    }
-    
-    .stats-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .circuit-element {
-        min-width: 60px;
-        min-height: 60px;
-        padding: 8px;
-    }
-    
-    .element-icon {
-        font-size: 24px;
-    }
-    
-    .element-name {
-        font-size: 10px;
-    }
-}
-
-
-/* Анимация для плавного перемещения */
-.circuit-element {
-    transition: transform 0.1s ease-out, box-shadow 0.2s ease;
-}
-
-.circuit-element.dragging {
-    transition: none !important;
-    cursor: grabbing !important;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-}
-
-/* Анимация для проводов при обновлении */
-.wire {
-    transition: all 0.05s linear;
-}
-
-/* Анимация появления */
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Анимация правильного ответа */
-@keyframes correct-answer {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
-}
-
-/* Анимация мигания лампочки */
-@keyframes bulb-blink {
-    0%, 100% { 
-        opacity: 1; 
-        box-shadow: 0 0 10px rgba(255, 235, 59, 0.5);
-    }
-    50% { 
-        opacity: 0.8; 
-        box-shadow: 0 0 20px rgba(255, 235, 59, 0.8);
-    }
-}
-
-.bulb-on {
-    animation: bulb-blink 0.5s 2;
-}
-
-/* Улучшение для drop-zone при перетаскивании */
-.drop-zone.drag-over {
-    border-color: #2196F3 !important;
-    background: rgba(33, 150, 243, 0.05);
-    animation: pulse-border 1s infinite;
-}
-
-@keyframes pulse-border {
-    0%, 100% { 
-        border-color: rgba(33, 150, 243, 0.5); 
-    }
-    50% { 
-        border-color: #2196F3; 
-    }
-}
-
-/* Анимация для выделенного элемента */
-.circuit-element.selected {
-    box-shadow: 0 0 0 3px #FFEB3B, 0 0 20px rgba(255, 235, 59, 0.5) !important;
-    animation: pulse-selected 1.5s infinite;
-}
-
-@keyframes pulse-selected {
-    0%, 100% { 
-        box-shadow: 0 0 0 3px #FFEB3B, 0 0 20px rgba(255, 235, 59, 0.5); 
-    }
-    50% { 
-        box-shadow: 0 0 0 3px #FFEB3B, 0 0 30px rgba(255, 235, 59, 0.8); 
-    }
-}
-
-/* Стили для уровня идентификации */
+/* Стили для уровня идентификации (1 уровень) */
 .identification-area {
-    display: none;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 15px;
-    margin-top: 20px;
+    margin: 20px auto;
+    max-width: 800px;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
 }
 
 .identification-item {
@@ -1201,10 +1049,10 @@ body {
     line-height: 1.3;
 }
 
-/* Стили для уровня формул */
+/* Стили для уровня формул (3 уровень) */
 .formula-area {
-    display: none;
-    margin-top: 20px;
+    margin: 20px auto;
+    max-width: 600px;
 }
 
 .formula-option {
@@ -1215,6 +1063,7 @@ body {
     cursor: pointer;
     transition: all 0.3s ease;
     border: 2px solid transparent;
+    text-align: center;
 }
 
 .formula-option:hover {
@@ -1233,221 +1082,7 @@ body {
     font-family: 'Courier New', monospace;
     font-size: 18px;
     color: #fff;
-}
-
-/* Анимации */
-@keyframes correct-answer {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
-}
-
-@keyframes bulb-blink {
-    0%, 100% { 
-        opacity: 1; 
-        box-shadow: 0 0 10px rgba(255, 235, 59, 0.5);
-    }
-    50% { 
-        opacity: 0.8; 
-        box-shadow: 0 0 20px rgba(255, 235, 59, 0.8);
-    }
-}
-
-.bulb-on {
-    animation: bulb-blink 0.5s 2;
-}
-
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Адаптивность */
-@media (max-width: 768px) {
-    .identification-area {
-        grid-template-columns: repeat(3, 1fr);
-    }
-    
-    .identification-icon {
-        font-size: 30px;
-    }
-    
-    .identification-name {
-        font-size: 12px;
-    }
-}
-
-@media (max-width: 480px) {
-    .identification-area {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .formula-text {
-        font-size: 16px;
-    }
-}
-
-/* Стили для элементов отладки */
-.debug-info {
-    position: fixed;
-    bottom: 10px;
-    right: 10px;
-    background: rgba(0, 0, 0, 0.7);
-    color: #4CAF50;
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 12px;
-    z-index: 1000;
-    display: none;
-}
-
-.debug-info.active {
-    display: block;
-}
-
-
-/* Обновленные стили для центрирования элементов в уровне 1 */
-.identification-area {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 15px;
-    margin: 30px auto;
-    max-width: 800px;
-    justify-content: center;
-    align-items: center;
-}
-
-.identification-item {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-    padding: 25px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border: 2px solid transparent;
-    min-height: 140px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.identification-item:hover {
-    background: rgba(255, 255, 255, 0.15);
-    transform: translateY(-3px);
-    border-color: #2196F3;
-}
-
-.identification-item.selected {
-    background: rgba(76, 175, 80, 0.2);
-    border-color: #4CAF50;
-    box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
-}
-
-.identification-icon {
-    font-size: 48px;
-    margin-bottom: 15px;
-}
-
-.identification-name {
-    font-size: 16px;
-    color: #fff;
-    text-align: center;
-    line-height: 1.4;
     font-weight: 500;
-}
-
-/* Стили для уровня формул */
-.formula-area {
-    margin: 30px auto;
-    max-width: 600px;
-}
-
-.formula-option {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-    padding: 20px 25px;
-    margin-bottom: 15px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border: 2px solid transparent;
-    text-align: center;
-}
-
-.formula-option:hover {
-    background: rgba(255, 255, 255, 0.15);
-    transform: translateX(5px);
-    border-color: #2196F3;
-}
-
-.formula-option.selected {
-    background: rgba(33, 150, 243, 0.2);
-    border-color: #2196F3;
-    box-shadow: 0 5px 15px rgba(33, 150, 243, 0.3);
-}
-
-.formula-text {
-    font-family: 'Courier New', monospace;
-    font-size: 20px;
-    color: #fff;
-    font-weight: 500;
-}
-
-/* Адаптивность для идентификации */
-@media (max-width: 900px) {
-    .identification-area {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-@media (max-width: 600px) {
-    .identification-area {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-    }
-    
-    .identification-item {
-        padding: 15px;
-        min-height: 120px;
-    }
-    
-    .identification-icon {
-        font-size: 36px;
-    }
-    
-    .identification-name {
-        font-size: 14px;
-    }
-    
-    .formula-text {
-        font-size: 18px;
-    }
-}
-
-@media (max-width: 400px) {
-    .identification-area {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 8px;
-    }
-    
-    .identification-item {
-        padding: 12px;
-        min-height: 100px;
-    }
-    
-    .identification-icon {
-        font-size: 32px;
-    }
-    
-    .identification-name {
-        font-size: 12px;
-    }
 }
 
 /* Стили для поля числового ввода */
@@ -1491,5 +1126,337 @@ input[type="number"] {
     -moz-appearance: textfield;
 }
 
-
 .element-img { width: 64px; height: 64px; }
+
+/* АДАПТИВНОСТЬ ПО ШИРИНЕ */
+@media (max-width: 1024px) {
+    .game-main {
+        padding: 15px;
+        gap: 15px;
+    }
+    
+    .elements-panel, .info-panel {
+        width: 220px;
+    }
+}
+
+@media (max-width: 900px) {
+    .identification-area {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .game-main {
+        flex-direction: column;
+        padding: 10px;
+    }
+    
+    .elements-panel, .info-panel {
+        width: 100%;
+        max-height: 200px;
+        overflow-y: auto;
+    }
+    
+    .game-stats {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    
+    .stat {
+        min-width: auto;
+    }
+    
+    .circuit-area {
+        min-height: 250px;
+    }
+    
+    .identification-area {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+    }
+    
+    .identification-item {
+        padding: 15px;
+        min-height: 100px;
+    }
+    
+    .identification-icon {
+        font-size: 32px;
+    }
+    
+    .identification-name {
+        font-size: 12px;
+    }
+    
+    .formula-text {
+        font-size: 16px;
+    }
+    
+    .formula-option {
+        padding: 12px 15px;
+    }
+}
+
+@media (max-width: 600px) {
+    .identification-area {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+    
+    .identification-item {
+        padding: 12px;
+        min-height: 90px;
+    }
+    
+    .identification-icon {
+        font-size: 28px;
+    }
+    
+    .identification-name {
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 480px) {
+    .game-logo h1 {
+        font-size: 36px;
+    }
+    
+    .game-header {
+        flex-direction: column;
+        gap: 15px;
+        padding: 10px;
+    }
+    
+    .game-controls {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .control-btn {
+        flex: 1;
+        border-radius: 8px;
+    }
+    
+    .circuit-element {
+        min-width: 70px;
+        min-height: 70px;
+        padding: 8px;
+    }
+    
+    .element-icon {
+        font-size: 28px;
+    }
+    
+    .element-name {
+        font-size: 10px;
+    }
+    
+    .identification-area {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+    
+    .identification-item {
+        min-height: 80px;
+        flex-direction: row;
+        justify-content: flex-start;
+        gap: 15px;
+        padding: 10px;
+    }
+    
+    .identification-icon {
+        font-size: 32px;
+        margin-bottom: 0;
+    }
+    
+    .identification-name {
+        font-size: 14px;
+    }
+}
+
+/* АДАПТИВНОСТЬ ПО ВЫСОТЕ */
+@media (max-height: 700px) {
+    .game-header {
+        padding: 10px 20px;
+    }
+    
+    .game-footer {
+        padding: 10px 20px;
+    }
+    
+    .game-main {
+        padding: 10px 15px;
+    }
+    
+    .elements-panel, .info-panel {
+        padding: 15px;
+    }
+    
+    .workspace {
+        padding: 15px;
+    }
+    
+    .circuit-area {
+        min-height: 150px;
+    }
+    
+    .hints-list {
+        max-height: 120px;
+    }
+    
+    .identification-item {
+        padding: 15px;
+        min-height: 100px;
+    }
+    
+    .identification-icon {
+        font-size: 36px;
+    }
+    
+    .identification-name {
+        font-size: 14px;
+    }
+    
+    .formula-option {
+        padding: 12px 15px;
+    }
+    
+    .formula-text {
+        font-size: 16px;
+    }
+}
+
+@media (max-height: 600px) {
+    .game-header {
+        padding: 8px 15px;
+    }
+    
+    .player-name {
+        font-size: 18px;
+    }
+    
+    .stat-value {
+        font-size: 16px;
+    }
+    
+    .game-main {
+        padding: 8px 10px;
+        gap: 10px;
+    }
+    
+    .elements-panel, .info-panel {
+        padding: 10px;
+    }
+    
+    .workspace {
+        padding: 10px;
+    }
+    
+    .control-panel {
+        margin-bottom: 10px;
+    }
+    
+    .question-panel {
+        padding: 10px;
+    }
+    
+    .circuit-element {
+        min-width: 60px;
+        min-height: 60px;
+    }
+    
+    .element-icon {
+        font-size: 24px;
+    }
+    
+    .identification-item {
+        padding: 10px;
+        min-height: 80px;
+    }
+    
+    .identification-icon {
+        font-size: 30px;
+    }
+    
+    .identification-name {
+        font-size: 12px;
+    }
+    
+    .formula-option {
+        padding: 10px 12px;
+    }
+    
+    .formula-text {
+        font-size: 14px;
+    }
+}
+
+
+.game-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 30px;
+    background: rgba(0, 0, 0, 0.3);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    flex-shrink: 0;
+}
+
+.message-area {
+    flex: 1;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.debug-buttons {
+    display: flex;
+    gap: 10px;
+    margin-left: 20px;
+}
+
+.debug-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ffaa00;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.debug-btn:hover {
+    background: rgba(255, 170, 0, 0.2);
+    border-color: #ffaa00;
+    transform: translateY(-1px);
+}
+
+.debug-btn:active {
+    transform: translateY(0);
+}
+
+/* Адаптация для мобильных */
+@media (max-width: 768px) {
+    .game-footer {
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px;
+    }
+    
+    .debug-buttons {
+        margin-left: 0;
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .debug-btn {
+        font-size: 11px;
+        padding: 5px 8px;
+    }
+}

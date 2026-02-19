@@ -33,28 +33,21 @@
                 <button id="pauseBtn" class="control-btn" title="Пауза">
                     ⏸️
                 </button>
-                <!-- <button id="quitBtn" class="control-btn danger" title="Выйти">
-                    🚪
-                </button> -->
             </div>
         </header>
 
         <main class="game-main">
-            <!-- Элементы скрываются/показываются в зависимости от уровня -->
             <div class="elements-panel" id="elementsPanel" style="display: none;">
                 <h3>📦 Доступные элементы</h3>
-                <div class="elements-grid" id="elementsGrid">
-                </div>
+                <div class="elements-grid" id="elementsGrid"></div>
             </div>
 
             <div class="workspace">
                 <div class="task-header">
                     <h3 id="taskTitle">Задание</h3>
-                    <div class="task-description" id="taskDescription">
-                    </div>
+                    <div class="task-description" id="taskDescription"></div>
                 </div>
                 
-                <!-- Схемы (только для уровня 2) -->
                 <div class="circuit-area" id="circuitArea" style="display: none;">
                     <div class="drop-zone" id="dropZone">
                         <div class="grid-lines"></div>
@@ -62,24 +55,14 @@
                 </div>
                 
                 <div class="control-panel">
-                    <button id="checkBtn" class="btn-primary">
-                        Проверить
-                    </button>
-                    <button id="resetBtn" class="btn-secondary">
-                        Сбросить
-                    </button>
+                    <button id="checkBtn" class="btn-primary">Проверить</button>
+                    <button id="resetBtn" class="btn-secondary">Сбросить</button>
                 </div>
                 
                 <div class="question-panel">
-                    <div class="question-text" id="questionText">
-                    </div>
-                    
-                    <!-- Идентификация (только для уровня 1) -->
+                    <div class="question-text" id="questionText"></div>
                     <div class="identification-area" id="identificationArea" style="display: none;"></div>
-                    
-                    <!-- Формулы (только для уровня 3) -->
                     <div class="formula-area" id="formulaArea" style="display: none;"></div>
-                    
                     <div class="feedback" id="feedback"></div>
                 </div>
             </div>
@@ -90,22 +73,25 @@
                     <div class="info-content" id="levelInfo">
                         Уровень <span id="currentLevelDisplay">1</span>
                     </div>
-                    <div class="question-counter" id="questionCounter">
-                        Вопрос: 1/5
-                    </div>
+                    <div class="question-counter" id="questionCounter">Вопрос: 1/5</div>
                 </div>
                 
+                <div class="hints-panel" id="hintsPanel" style="display: none;">
+                    <h3>💡 Подсказки</h3>
+                    <div class="hints-list" id="hintsList"></div>
+                </div>
                 
                 <div class="action-panel">
-                    <button id="finishGameBtn" class="btn-danger">
-                        Завершить игру
-                    </button>
+                    <button id="finishGameBtn" class="btn-danger">Завершить игру</button>
                 </div>
             </div>
         </main>
 
         <footer class="game-footer">
-            <div class="message-area" id="messageArea">
+            <div class="message-area" id="messageArea"></div>
+            <div class="debug-buttons">
+                <button id="debugSkipTaskBtn" class="debug-btn" title="Пропустить задание (Shift+T)">Отладка: пропустить задание</button>
+                <button id="debugSkipLevelBtn" class="debug-btn" title="Пропустить уровень (Shift+L)">Отладка: пропустить уровень</button>
             </div>
         </footer>
     </div>
@@ -116,7 +102,7 @@
                 <h2>⏸️ Игра на паузе</h2>
             </div>
             <div class="modal-body">
-                <p>Игра приостановлена</p>
+                <div id="pauseInfo"></div>
             </div>
             <div class="modal-footer">
                 <button id="resumeBtn" class="btn-primary">Продолжить</button>
@@ -151,6 +137,49 @@
         </div>
     </div>
 
+    <div id="levelRulesModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="levelRulesTitle">Уровень <span id="levelRulesLevel">1</span></h2>
+            </div>
+            <div class="modal-body">
+                <div id="levelRulesText"></div>
+            </div>
+            <div class="modal-footer">
+                <button id="startLevelBtn" class="btn-primary">Начать уровень</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="correctAnswerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>✅ Правильно!</h2>
+            </div>
+            <div class="modal-body">
+                <p>Отличная работа! Хотите перейти к следующему вопросу?</p>
+            </div>
+            <div class="modal-footer">
+                <button id="nextQuestionBtn" class="btn-primary">Следующий вопрос</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="wrongAnswerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>❌ Неправильно</h2>
+            </div>
+            <div class="modal-body">
+                <p>Попробуйте ещё раз. У вас осталось <span id="attemptsLeftSpan"></span> попыток.</p>
+            </div>
+            <div class="modal-footer">
+                <button id="tryAgainBtn" class="btn-primary">Попробовать снова</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
     <script src="game.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {

@@ -15,21 +15,21 @@ const GameConfig = {
             type: 'identification', 
             questions: 4,
             timeLimit: 240,
-            description: 'Идентификация элементов',
+            description: 'Необходимо правильно идентифицировать элементы в соответствии с категорией',
             difficultyMultiplier: 1.0
         },
         2: { 
             type: 'assembly', 
             questions: 3,
             timeLimit: 300,
-            description: 'Сборка электрических схем',
+            description: 'Необходимо правильно собрать электрические схемы',
             difficultyMultiplier: 1.5
         },
         3: { 
             type: 'formula', 
             questions: 4,
             timeLimit: 300,
-            description: 'Выбор формул и решение задач',
+            description: 'Необходимо правильно выбрать формулу и решить задачу',
             difficultyMultiplier: 2.0
         }
     },
@@ -274,7 +274,6 @@ class DebugController {
     }
 }
 
-// Заменяем класс ConnectionChecker на исправленную версию
 class ConnectionChecker {
     static checkCircuitByConnections(elements, connections, requiredConnections) {
         console.log('=== Проверка схемы ===');
@@ -460,6 +459,149 @@ class ConnectionChecker {
  * КЛАСС ДЛЯ РАБОТЫ С ЗАДАНИЯМИ
  */
 class ElectricalTasks {
+    static identificationTasksShuffled = [];
+    static formulaProblemsShuffled = [];
+    static formulaIndex = 0;
+
+    static initLevel(level) {
+        if (level === 1) {
+            this.identificationTasksShuffled = [...GameConfig.IDENTIFICATION_TASKS];
+            for (let i = this.identificationTasksShuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [this.identificationTasksShuffled[i], this.identificationTasksShuffled[j]] = 
+                [this.identificationTasksShuffled[j], this.identificationTasksShuffled[i]];
+            }
+        } else if (level === 3) {
+            const formulaProblems = [
+                {
+                    formulaType: 'power',
+                    formula: 'P = U × I',
+                    name: 'Мощность',
+                    description: 'Мощность равна произведению напряжения на силу тока',
+                    subtask1: {
+                        question: 'Какая формула описывает зависимость между мощностью, напряжением и силой тока?',
+                        options: [
+                            'P = U × I',
+                            'P = I / R',
+                            'P = U / R',
+                            'P = R × I'
+                        ],
+                        correctAnswer: 0
+                    },
+                    subtask2: {
+                        generate: () => {
+                            const U = Math.floor(Math.random() * 20) + 5;
+                            const I = Math.floor(Math.random() * 10) + 2;
+                            const P = U * I;
+                            return {
+                                question: `Напряжение U = ${U} В, сила тока I = ${I} А. Найдите мощность.`,
+                                correctAnswer: P,
+                                units: 'Вт'
+                            };
+                        }
+                    }
+                },
+                {
+                    formulaType: 'ohm',
+                    formula: 'I = U / R',
+                    name: 'Закон Ома',
+                    description: 'Сила тока прямо пропорциональна напряжению и обратно пропорциональна сопротивлению',
+                    subtask1: {
+                        question: 'Какая формула описывает зависимость между напряжением, током и сопротивлением?',
+                        options: [
+                            'I = U / R',
+                            'I = R / U',
+                            'U = I × R',
+                            'R = U × I'
+                        ],
+                        correctAnswer: 0
+                    },
+                    subtask2: {
+                        generate: () => {
+                            let U, R, I;
+                            do {
+                                U = Math.floor(Math.random() * 30) + 10;
+                                R = Math.floor(Math.random() * 10) + 5;
+                                I = U / R;
+                            } while (I % 1 !== 0);
+                            return {
+                                question: `Напряжение U = ${U} В, сопротивление R = ${R} Ом. Найдите силу тока.`,
+                                correctAnswer: I,
+                                units: 'А'
+                            };
+                        }
+                    }
+                },
+                {
+                    formulaType: 'series',
+                    formula: 'Rобщ = R₁ + R₂ + ... + Rₙ',
+                    name: 'Последовательное соединение резисторов',
+                    description: 'Общее сопротивление последовательной цепи равно сумме сопротивлений',
+                    subtask1: {
+                        question: 'Как рассчитывается общее сопротивление последовательной цепи?',
+                        options: [
+                            'Rобщ = R₁ + R₂ + ... + Rₙ',
+                            '1/Rобщ = 1/R₁ + 1/R₂ + ... + 1/Rₙ',
+                            'Rобщ = R₁ × R₂ × ... × Rₙ',
+                            'Rобщ = (R₁ + R₂ + ... + Rₙ) / n'
+                        ],
+                        correctAnswer: 0
+                    },
+                    subtask2: {
+                        generate: () => {
+                            const R1 = Math.floor(Math.random() * 15) + 5;
+                            const R2 = Math.floor(Math.random() * 15) + 5;
+                            const total = R1 + R2;
+                            return {
+                                question: `Два резистора сопротивлением R₁ = ${R1} Ом и R₂ = ${R2} Ом соединены последовательно. Найдите общее сопротивление.`,
+                                correctAnswer: total,
+                                units: 'Ом'
+                            };
+                        }
+                    }
+                },
+                {
+                    formulaType: 'parallel',
+                    formula: '1/Rобщ = 1/R₁ + 1/R₂ + ... + 1/Rₙ',
+                    name: 'Параллельное соединение резисторов',
+                    description: 'Обратная величина общего сопротивления параллельной цепи равна сумме обратных величин сопротивлений',
+                    subtask1: {
+                        question: 'Как рассчитывается общее сопротивление параллельной цепи?',
+                        options: [
+                            '1/Rобщ = 1/R₁ + 1/R₂ + ... + 1/Rₙ',
+                            'Rобщ = R₁ + R₂ + ... + Rₙ',
+                            'Rобщ = (R₁ × R₂ × ... × Rₙ) / (R₁ + R₂ + ... + Rₙ)',
+                            'Rобщ = n / (1/R₁ + 1/R₂ + ... + 1/Rₙ)'
+                        ],
+                        correctAnswer: 0
+                    },
+                    subtask2: {
+                        generate: () => {
+                            let R1, R2, total;
+                            do {
+                                R1 = Math.floor(Math.random() * 15) + 5;
+                                R2 = Math.floor(Math.random() * 15) + 5;
+                                total = (R1 * R2) / (R1 + R2);
+                            } while (total % 1 !== 0);
+                            return {
+                                question: `Два резистора сопротивлением R₁ = ${R1} Ом и R₂ = ${R2} Ом соединены параллельно. Найдите общее сопротивление.`,
+                                correctAnswer: total,
+                                units: 'Ом'
+                            };
+                        }
+                    }
+                }
+            ];
+            this.formulaProblemsShuffled = [...formulaProblems];
+            for (let i = this.formulaProblemsShuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [this.formulaProblemsShuffled[i], this.formulaProblemsShuffled[j]] = 
+                [this.formulaProblemsShuffled[j], this.formulaProblemsShuffled[i]];
+            }
+            this.formulaIndex = 0;
+        }
+    }
+
     static generateProblem(level, problemType) {
         switch(level) {
             case 1:
@@ -478,8 +620,14 @@ class ElectricalTasks {
     }
 
     static generateSpecificIdentificationProblem(questionNumber = 1) {
-        const taskIndex = (questionNumber - 1) % GameConfig.IDENTIFICATION_TASKS.length;
-        const taskType = GameConfig.IDENTIFICATION_TASKS[taskIndex];
+        if (this.identificationTasksShuffled.length === 0) {
+            this.initLevel(1);
+        }
+        const taskType = this.identificationTasksShuffled[questionNumber - 1];
+        if (!taskType) {
+            console.error('Нет задачи для вопроса', questionNumber);
+            return null;
+        }
         
         const correctCategory = GameConfig[taskType.correctCategory];
         const correctKeys = Object.keys(correctCategory);
@@ -563,7 +711,7 @@ class ElectricalTasks {
         
         switch(circuitType) {
             case 'sequential':
-                text = `Соберите последовательную цепь из: ${requiredElements.map(el => 
+                text = `Соберите последовательно цепь из этих элементов(в том порядке в котором указаны): ${requiredElements.map(el => 
                     GameConfig.ELECTRICAL_ELEMENTS[el]?.name || 
                     GameConfig.POWER_SOURCES[el]?.name
                 ).join(', ')}`;
@@ -711,148 +859,25 @@ class ElectricalTasks {
     }
 
     static generateFormulaProblem() {
-        const formulaProblems = [
-            {
-                formulaType: 'power',
-                formula: 'P = U × I',
-                name: 'Мощность',
-                description: 'Мощность равна произведению напряжения на силу тока',
-                subtask1: {
-                    question: 'Какая формула описывает зависимость между мощностью, напряжением и силой тока?',
-                    options: [
-                        'P = U × I',
-                        'P = I / R',
-                        'P = U / R',
-                        'P = R × I'
-                    ],
-                    correctAnswer: 0
-                },
-                subtask2: {
-                    generate: () => {
-                        const U = Math.floor(Math.random() * 20) + 5;
-                        const I = Math.floor(Math.random() * 10) + 2;
-                        const P = U * I;
-                        
-                        return {
-                            question: `Напряжение U = ${U} В, сила тока I = ${I} А. Найдите мощность.`,
-                            correctAnswer: P,
-                            units: 'Вт'
-                        };
-                    }
-                }
-            },
-            {
-                formulaType: 'ohm',
-                formula: 'I = U / R',
-                name: 'Закон Ома',
-                description: 'Сила тока прямо пропорциональна напряжению и обратно пропорциональна сопротивлению',
-                subtask1: {
-                    question: 'Какая формула описывает зависимость между напряжением, током и сопротивлением?',
-                    options: [
-                        'I = U / R',
-                        'I = R / U',
-                        'U = I × R',
-                        'R = U × I'
-                    ],
-                    correctAnswer: 0
-                },
-                subtask2: {
-                    generate: () => {
-                        let U, R, I;
-                        do {
-                            U = Math.floor(Math.random() * 30) + 10;
-                            R = Math.floor(Math.random() * 10) + 5;
-                            I = U / R;
-                        } while (I % 1 !== 0);
-                        
-                        return {
-                            question: `Напряжение U = ${U} В, сопротивление R = ${R} Ом. Найдите силу тока.`,
-                            correctAnswer: I,
-                            units: 'А'
-                        };
-                    }
-                }
-            },
-            {
-                formulaType: 'series',
-                formula: 'Rобщ = R₁ + R₂ + ... + Rₙ',
-                name: 'Последовательное соединение резисторов',
-                description: 'Общее сопротивление последовательной цепи равно сумме сопротивлений',
-                subtask1: {
-                    question: 'Как рассчитывается общее сопротивление последовательной цепи?',
-                    options: [
-                        'Rобщ = R₁ + R₂ + ... + Rₙ',
-                        '1/Rобщ = 1/R₁ + 1/R₂ + ... + 1/Rₙ',
-                        'Rобщ = R₁ × R₂ × ... × Rₙ',
-                        'Rобщ = (R₁ + R₂ + ... + Rₙ) / n'
-                    ],
-                    correctAnswer: 0
-                },
-                subtask2: {
-                    generate: () => {
-                        const R1 = Math.floor(Math.random() * 15) + 5;
-                        const R2 = Math.floor(Math.random() * 15) + 5;
-                        const total = R1 + R2;
-                        
-                        return {
-                            question: `Два резистора сопротивлением R₁ = ${R1} Ом и R₂ = ${R2} Ом соединены последовательно. Найдите общее сопротивление.`,
-                            correctAnswer: total,
-                            units: 'Ом'
-                        };
-                    }
-                }
-            },
-            {
-                formulaType: 'parallel',
-                formula: '1/Rобщ = 1/R₁ + 1/R₂ + ... + 1/Rₙ',
-                name: 'Параллельное соединение резисторов',
-                description: 'Обратная величина общего сопротивления параллельной цепи равна сумме обратных величин сопротивлений',
-                subtask1: {
-                    question: 'Как рассчитывается общее сопротивление параллельной цепи?',
-                    options: [
-                        '1/Rобщ = 1/R₁ + 1/R₂ + ... + 1/Rₙ',
-                        'Rобщ = R₁ + R₂ + ... + Rₙ',
-                        'Rобщ = (R₁ × R₂ × ... × Rₙ) / (R₁ + R₂ + ... + Rₙ)',
-                        'Rобщ = n / (1/R₁ + 1/R₂ + ... + 1/Rₙ)'
-                    ],
-                    correctAnswer: 0
-                },
-                subtask2: {
-                    generate: () => {
-                        let R1, R2, total;
-                        do {
-                            R1 = Math.floor(Math.random() * 15) + 5;
-                            R2 = Math.floor(Math.random() * 15) + 5;
-                            total = (R1 * R2) / (R1 + R2);
-                        } while (total % 1 !== 0);
-                        
-                        return {
-                            question: `Два резистора сопротивлением R₁ = ${R1} Ом и R₂ = ${R2} Ом соединены параллельно. Найдите общее сопротивление.`,
-                            correctAnswer: total,
-                            units: 'Ом'
-                        };
-                    }
-                }
-            }
-        ];
+        if (this.formulaProblemsShuffled.length === 0) {
+            this.initLevel(3);
+        }
+        const selectedFormula = this.formulaProblemsShuffled[this.formulaIndex];
+        this.formulaIndex = (this.formulaIndex + 1) % this.formulaProblemsShuffled.length;
         
-        // Выбираем формулу по порядку (4 задачи по одной на каждую формулу)
-        const formulaIndex = (this.formulaCounter || 0) % formulaProblems.length;
-        this.formulaCounter = (this.formulaCounter || 0) + 1;
+        if (!selectedFormula) {
+            console.error('Нет задачи для формулы');
+            return null;
+        }
         
-        const selectedFormula = formulaProblems[formulaIndex];
         const subtask2 = selectedFormula.subtask2.generate();
         
-        // Создаем копию массива вариантов для перемешивания
         const shuffledOptions = [...selectedFormula.subtask1.options];
-        
-        // Перемешиваем варианты
         for (let i = shuffledOptions.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [shuffledOptions[i], shuffledOptions[j]] = [shuffledOptions[j], shuffledOptions[i]];
         }
-        
-        // Находим новый индекс правильного ответа после перемешивания
+
         const originalCorrectAnswer = selectedFormula.subtask1.correctAnswer;
         const correctAnswerText = selectedFormula.subtask1.options[originalCorrectAnswer];
         const newCorrectAnswer = shuffledOptions.indexOf(correctAnswerText);
@@ -866,8 +891,8 @@ class ElectricalTasks {
             subtask: 1,
             subtask1: {
                 question: selectedFormula.subtask1.question,
-                options: shuffledOptions, // Используем перемешанные варианты
-                correctAnswer: newCorrectAnswer // Новый индекс правильного ответа
+                options: shuffledOptions, 
+                correctAnswer: newCorrectAnswer 
             },
             subtask2: subtask2
         };
@@ -910,7 +935,7 @@ class ElectricSchemesGame {
         console.log('Требуемые соединения:', this.currentProblem?.requiredConnections);
         
         const problem = this.currentProblem;
-        if (problem.type === 'sequential') {
+        if (problem && problem.type === 'sequential') {
             console.log('Проверка последовательной цепи...');
             const result = ConnectionChecker.checkSequentialByOrder(
                 this.state.placedElements,
@@ -918,7 +943,7 @@ class ElectricSchemesGame {
                 problem.correctOrder
             );
             console.log('Результат:', result);
-        } else if (problem.type === 'parallel' || problem.type === 'mixed') {
+        } else if (problem && (problem.type === 'parallel' || problem.type === 'mixed')) {
             console.log('Проверка цепи по соединениям...');
             const result = ConnectionChecker.checkCircuitByConnections(
                 this.state.placedElements,
@@ -970,7 +995,6 @@ class ElectricSchemesGame {
         this.initDOMElements();
         this.initEventListeners();
         this.loadLevel();
-        this.startTimer();
         this.updateUI();
         this.initMouseHandlers();
     }
@@ -1006,20 +1030,97 @@ class ElectricSchemesGame {
         this.elements.circuitArea = document.getElementById('circuitArea');
         
         this.elements.pauseModal = document.getElementById('pauseModal');
+        this.elements.pauseInfo = document.getElementById('pauseInfo'); 
         this.elements.levelCompleteModal = document.getElementById('levelCompleteModal');
         
+        this.elements.levelRulesModal = document.getElementById('levelRulesModal');
+        this.elements.levelRulesLevel = document.getElementById('levelRulesLevel');
+        this.elements.levelRulesText = document.getElementById('levelRulesText');
+        this.elements.startLevelBtn = document.getElementById('startLevelBtn');
+
+        this.elements.correctAnswerModal = document.getElementById('correctAnswerModal');
+        this.elements.wrongAnswerModal = document.getElementById('wrongAnswerModal');
+        this.elements.nextQuestionBtn = document.getElementById('nextQuestionBtn');
+        this.elements.tryAgainBtn = document.getElementById('tryAgainBtn');
+        this.elements.attemptsLeftSpan = document.getElementById('attemptsLeftSpan');
+        
+        this.elements.hintsPanel = document.getElementById('hintsPanel'); 
+
+        this.elements.debugSkipTaskBtn = document.getElementById('debugSkipTaskBtn');
+        this.elements.debugSkipLevelBtn = document.getElementById('debugSkipLevelBtn');
+
         this.createWiresContainer();
     }
 
+    updatePauseModalContent() {
+        const level = this.state.currentLevel;
+        const levelData = GameConfig.LEVELS[level];
+        const scoring = GameConfig.SCORING;
+
+        let html = `
+            <p><strong>Уровень ${level}: ${levelData.description}</strong></p>
+            <p>Текущий вопрос: ${this.state.currentQuestion}/${levelData.questions}</p>
+            <p>Осталось времени: ${Math.floor(this.timeLeft / 60)}:${(this.timeLeft % 60).toString().padStart(2, '0')}</p>
+            <p>Попыток: ${this.state.attemptsLeft}</p>
+            <p>Баллы: ${this.state.score}</p>
+            <hr>
+            <p><strong>Правила уровня:</strong></p>
+            <ul>
+                <li>Правильный ответ: +${scoring.CORRECT_ANSWER * levelData.difficultyMultiplier}</li>
+                <li>Неправильный ответ: ${scoring.WRONG_ANSWER * levelData.difficultyMultiplier}</li>
+                <li>Завершение уровня: +${scoring.LEVEL_COMPLETE * levelData.difficultyMultiplier}</li>
+                <li>Бонус за время: +${scoring.TIME_BONUS * levelData.difficultyMultiplier} (если останется >50% времени)</li>
+            </ul>
+        `;
+
+        if (level === 2) {
+            html += `
+                <hr>
+                <p><strong>Управление схемой:</strong></p>
+                <ul>
+                    <li>🔹 Перетащите элемент из панели слева в рабочую область</li>
+                    <li>🔹 Чтобы соединить элементы: кликните на первый элемент (он выделится), затем на второй</li>
+                    <li>🔹 Чтобы удалить элемент: дважды кликните по нему или нажмите клавишу R (предварительно выделив)</li>
+                    <li>🔹 При удалении элемента все связанные с ним соединения также удаляются</li>
+                    <li>🔹 Кнопка "Сбросить" очищает всю схему</li>
+                </ul>
+            `;
+        }
+
+        this.elements.pauseInfo.innerHTML = html;
+    }
+
+    updateHints() {
+        const level = this.state.currentLevel;
+        const hintsList = this.elements.hintsList;
+        if (!hintsList) return;
+
+        if (level === 2) {
+            this.elements.hintsPanel.style.display = 'block';
+            hintsList.innerHTML = `
+                <div class="hint-item">• Двойной клик по элементу — удалить</div>
+                <div class="hint-item">• Клавиша R (при выделенном элементе) — удалить</div>
+                <div class="hint-item">• Клик — выделить, затем клик на другой — соединить</div>
+                <div class="hint-item">• При удалении элемента соединения пропадают</div>
+            `;
+        } else {
+            this.elements.hintsPanel.style.display = 'none';
+        }
+    }
+
+
+
     createWiresContainer() {
-        const oldContainer = this.elements.dropZone.querySelector('.wires-container');
+        const oldContainer = this.elements.dropZone?.querySelector('.wires-container');
         if (oldContainer) oldContainer.remove();
         
         this.wiresContainer = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
         this.wiresContainer.classList.add('wires-container');
         this.wiresContainer.setAttribute('width', '100%');
         this.wiresContainer.setAttribute('height', '100%');
-        this.elements.dropZone.appendChild(this.wiresContainer);
+        if (this.elements.dropZone) {
+            this.elements.dropZone.appendChild(this.wiresContainer);
+        }
     }
 
     initEventListeners() {
@@ -1027,12 +1128,20 @@ class ElectricSchemesGame {
         this.elements.checkBtn?.addEventListener('click', () => this.checkAnswer());
         this.elements.resetBtn?.addEventListener('click', () => this.resetWorkspace());
         this.elements.quitBtn?.addEventListener('click', () => this.quitToMenu());
+
+        this.elements.debugSkipTaskBtn?.addEventListener('click', () => this.skipTask());
+        this.elements.debugSkipLevelBtn?.addEventListener('click', () => this.skipLevel());
         
         document.getElementById('resumeBtn')?.addEventListener('click', () => this.resumeGame());
         document.getElementById('quitToMenuBtn')?.addEventListener('click', () => this.quitToMenu());
         document.getElementById('nextLevelBtn')?.addEventListener('click', () => this.nextLevel());
         document.getElementById('finishGameBtn')?.addEventListener('click', () => this.finishGame());
         document.getElementById('finishGameFromModalBtn')?.addEventListener('click', () => this.finishGame());
+        
+        this.elements.startLevelBtn?.addEventListener('click', () => this.startLevelAfterRules());
+
+        this.elements.nextQuestionBtn?.addEventListener('click', () => this.nextQuestion());
+        this.elements.tryAgainBtn?.addEventListener('click', () => this.resumeAfterWrong());
         
         document.addEventListener('keydown', (e) => this.handleKeyPress(e));
         document.addEventListener('keyup', (e) => this.handleKeyUp(e));
@@ -1042,20 +1151,85 @@ class ElectricSchemesGame {
         this.initDragAndDrop();
     }
 
+    showLevelRulesModal() {
+        const level = this.state.currentLevel;
+        const levelData = GameConfig.LEVELS[level];
+        const scoring = GameConfig.SCORING;
+
+        let rulesHtml = `
+            <p><strong>${levelData.description}</strong></p>
+            <p>Количество вопросов: ${levelData.questions}</p>
+            <p>Время на уровень: ${Math.floor(levelData.timeLimit / 60)}:${(levelData.timeLimit % 60).toString().padStart(2, '0')} минут</p>
+            <p>Попыток: ${this.state.attemptsLeft}</p>
+            <p>Баллы:</p>
+            <ul>
+                <li>Правильный ответ: +${scoring.CORRECT_ANSWER * levelData.difficultyMultiplier}</li>
+                <li>Неправильный ответ: ${scoring.WRONG_ANSWER * levelData.difficultyMultiplier}</li>
+                <li>Завершение уровня: +${scoring.LEVEL_COMPLETE * levelData.difficultyMultiplier}</li>
+                <li>Бонус за время: +${scoring.TIME_BONUS * levelData.difficultyMultiplier} (если останется больше половины времени)</li>
+            </ul>
+            <p style="color: #FF9800;"> Внимание! Таймер запустится только после нажатия кнопки "Начать уровень".</p>
+        `;
+        
+        this.elements.levelRulesLevel.textContent = level;
+        this.elements.levelRulesText.innerHTML = rulesHtml;
+        
+        this.state.isPaused = true;
+        this.elements.levelRulesModal.style.display = 'flex';
+    }
+
+    startLevelAfterRules() {
+        this.elements.levelRulesModal.style.display = 'none';
+        this.state.isPaused = false;
+        if (!this.timerInterval) {
+            this.startTimer();
+        }
+    }
+
+    showCorrectModal() {
+        this.state.isPaused = true;
+        this.elements.correctAnswerModal.style.display = 'flex';
+    }
+
+    showWrongModal() {
+        this.state.isPaused = true;
+        this.elements.attemptsLeftSpan.textContent = this.state.attemptsLeft;
+        this.elements.wrongAnswerModal.style.display = 'flex';
+    }
+
+    nextQuestion() {
+        this.elements.correctAnswerModal.style.display = 'none';
+        this.state.isPaused = false;
+        const level = GameConfig.LEVELS[this.state.currentLevel];
+        this.state.currentQuestion++;
+        
+        if (this.state.currentQuestion > level.questions) {
+            this.completeLevel();
+        } else {
+            this.loadProblem();
+            this.updateUI();
+        }
+    }
+
+    resumeAfterWrong() {
+        this.elements.wrongAnswerModal.style.display = 'none';
+        this.state.isPaused = false;
+    }
+
     initDragAndDrop() {
         this.createElementTemplates();
         
-        this.elements.dropZone.addEventListener('dragover', (e) => {
+        this.elements.dropZone?.addEventListener('dragover', (e) => {
             e.preventDefault();
             e.dataTransfer.dropEffect = 'copy';
             this.elements.dropZone.classList.add('drag-over');
         });
 
-        this.elements.dropZone.addEventListener('dragleave', () => {
+        this.elements.dropZone?.addEventListener('dragleave', () => {
             this.elements.dropZone.classList.remove('drag-over');
         });
 
-        this.elements.dropZone.addEventListener('drop', (e) => {
+        this.elements.dropZone?.addEventListener('drop', (e) => {
             e.preventDefault();
             this.elements.dropZone.classList.remove('drag-over');
             const elementType = e.dataTransfer.getData('element-type');
@@ -1175,8 +1349,6 @@ class ElectricSchemesGame {
         element.style.position = 'absolute';
         element.style.left = `${Math.max(10, Math.min(x, this.elements.dropZone.clientWidth - 80))}px`;
         element.style.top = `${Math.max(10, Math.min(y, this.elements.dropZone.clientHeight - 80))}px`;
-        element.style.backgroundColor = `${elementData.color}20`;
-        element.style.border = `2px solid ${elementData.color}`;
         
         this.addElementHandlers(element, elementId, type);
         
@@ -1222,6 +1394,13 @@ class ElectricSchemesGame {
                 this.deselectElement();
             } else {
                 this.connectElements(this.state.selectedElement, elementId);
+            }
+        });
+
+        element.addEventListener('dblclick', (e) => {
+            e.stopPropagation();
+            if (this.state.currentLevel === 2) {
+                this.removeElement(elementId);
             }
         });
     }
@@ -1358,7 +1537,6 @@ class ElectricSchemesGame {
     }
 
     loadLevel() {
-            // Если текущий уровень превышает количество доступных уровней, завершаем игру
         if (this.state.currentLevel > Object.keys(GameConfig.LEVELS).length) {
             this.completeGame();
             return;
@@ -1370,6 +1548,8 @@ class ElectricSchemesGame {
             return;
         }
 
+        ElectricalTasks.initLevel(this.state.currentLevel);
+
         this.state.currentQuestion = 1;
         this.timeLeft = level.timeLimit;
         this.clearWorkspace();
@@ -1380,6 +1560,8 @@ class ElectricSchemesGame {
         this.adjustUIForLevel();
         
         this.loadProblem();
+
+        this.showLevelRulesModal();
     }
 
     adjustUIForLevel() {
@@ -1407,7 +1589,6 @@ class ElectricSchemesGame {
             this.elements.questionText.style.display = 'block';
         }
         
-        // Удаляем старый контейнер для числового ввода, если есть
         const oldNumericArea = document.getElementById('numericAnswerArea');
         if (oldNumericArea) {
             oldNumericArea.style.display = 'none';
@@ -1448,21 +1629,21 @@ class ElectricSchemesGame {
                 if (this.elements.questionText) {
                     this.elements.questionText.style.display = 'block';
                 }
-                
-                // Создаем контейнер для числового ввода, если его нет
+
                 if (!document.getElementById('numericAnswerArea')) {
                     const numericArea = document.createElement('div');
                     numericArea.id = 'numericAnswerArea';
                     numericArea.className = 'numeric-answer-area';
                     numericArea.style.display = 'none';
                     
-                    // Вставляем после formulaArea
                     if (this.elements.formulaArea && this.elements.formulaArea.parentNode) {
                         this.elements.formulaArea.parentNode.insertBefore(numericArea, this.elements.formulaArea.nextSibling);
                     }
                 }
                 break;
         }
+
+        this.updateHints();
     }
 
     loadProblem() {
@@ -1567,18 +1748,15 @@ class ElectricSchemesGame {
         this.elements.formulaArea.innerHTML = '';
         this.elements.formulaArea.style.display = 'block';
         
-        // Скрываем поле числового ввода по умолчанию
         const numericArea = document.getElementById('numericAnswerArea');
         if (numericArea) {
             numericArea.style.display = 'none';
         }
         
-        // Сбрасываем ответы
         this.selectedFormulaAnswer = undefined;
         this.selectedNumericAnswer = '';
         
         if (this.currentProblem.subtask === 1) {
-            // Первая подзадача: выбор формулы
             this.elements.questionText.innerHTML = `
                 <strong>${this.currentProblem.name}</strong><br>
                 ${this.currentProblem.description}<br><br>
@@ -1606,7 +1784,6 @@ class ElectricSchemesGame {
                 this.elements.formulaArea.appendChild(optionDiv);
             });
         } else {
-            // Вторая подзадача: числовой ответ
             this.elements.questionText.innerHTML = `
                 <strong>${this.currentProblem.name}</strong><br>
                 <div style="font-size: 18px; color: #FFEB3B; margin: 10px 0; padding: 10px; background: rgba(255, 235, 59, 0.1); border-radius: 8px;">
@@ -1615,7 +1792,6 @@ class ElectricSchemesGame {
                 ${this.currentProblem.subtask2.question}
             `;
             
-            // Скрываем варианты формул, показываем поле для числового ввода
             this.elements.formulaArea.style.display = 'none';
             
             const numericArea = document.getElementById('numericAnswerArea');
@@ -1625,23 +1801,19 @@ class ElectricSchemesGame {
                 numericArea.style.alignItems = 'center';
                 numericArea.style.gap = '15px';
                 
-                // Очищаем предыдущий контент
                 numericArea.innerHTML = '';
-                
-                // Создаем контейнер для поля ввода
+
                 const inputContainer = document.createElement('div');
                 inputContainer.style.display = 'flex';
                 inputContainer.style.flexDirection = 'column';
                 inputContainer.style.alignItems = 'center';
                 inputContainer.style.gap = '10px';
-                
-                // Создаем подпись
+
                 const label = document.createElement('div');
                 label.textContent = 'Введите ответ:';
                 label.style.color = '#aaa';
                 label.style.fontSize = '16px';
-                
-                // Создаем поле ввода
+
                 const input = document.createElement('input');
                 input.type = 'number';
                 input.id = 'numericAnswerInput';
@@ -1674,8 +1846,7 @@ class ElectricSchemesGame {
                 inputContainer.appendChild(label);
                 inputContainer.appendChild(input);
                 numericArea.appendChild(inputContainer);
-                
-                // Добавляем единицы измерения, если есть
+
                 if (this.currentProblem.subtask2.units) {
                     const unitsLabel = document.createElement('div');
                     unitsLabel.textContent = `Единицы измерения: ${this.currentProblem.subtask2.units}`;
@@ -1685,7 +1856,6 @@ class ElectricSchemesGame {
                     numericArea.appendChild(unitsLabel);
                 }
                 
-                // Фокусируемся на поле ввода
                 setTimeout(() => {
                     input.focus();
                 }, 100);
@@ -1718,19 +1888,10 @@ class ElectricSchemesGame {
                 } else {
                     const points = GameConfig.SCORING.CORRECT_ANSWER * level.difficultyMultiplier;
                     this.updateScore(points);
-                    this.playSuccessAnimation();
-                    this.showFeedback('✅ Обе задачи решены правильно!', 'success');
                     
-                    setTimeout(() => {
-                        this.state.currentQuestion++;
-                        
-                        if (this.state.currentQuestion > level.questions) {
-                            this.completeLevel();
-                        } else {
-                            this.loadProblem();
-                            this.updateUI();
-                        }
-                    }, 1500);
+                    
+                    this.showCorrectModal();
+                    return;
                 }
             } else {
                 this.updateScore(GameConfig.SCORING.WRONG_ANSWER);
@@ -1739,12 +1900,11 @@ class ElectricSchemesGame {
                 if (this.state.attemptsLeft <= 0) {
                     this.handleLevelFailure();
                 } else {
-                    this.showFeedback('❌ Неправильно. Попробуйте снова.', 'error');
+                    this.showWrongModal();
                 }
+                this.updateUI();
+                return;
             }
-            
-            this.updateUI();
-            return;
         }
 
         console.log('Результат проверки:', isCorrect);
@@ -1753,25 +1913,8 @@ class ElectricSchemesGame {
             const points = GameConfig.SCORING.CORRECT_ANSWER * level.difficultyMultiplier;
             this.updateScore(points);
             
-            this.playSuccessAnimation();
             
-            this.showFeedback('✅ Правильно!', 'success');
-            
-            setTimeout(() => {
-                this.state.currentQuestion++;
-                
-                console.log('Текущий вопрос:', this.state.currentQuestion, 'Всего вопросов:', level.questions);
-                
-                if (this.state.currentQuestion > level.questions) {
-                    console.log('Завершаем уровень');
-                    this.completeLevel();
-                } else {
-                    console.log('Загружаем следующий вопрос');
-                    this.loadProblem();
-                    this.updateUI();
-                }
-            }, 1500);
-            
+            this.showCorrectModal();
         } else {
             this.updateScore(GameConfig.SCORING.WRONG_ANSWER);
             this.state.attemptsLeft--;
@@ -1779,7 +1922,7 @@ class ElectricSchemesGame {
             if (this.state.attemptsLeft <= 0) {
                 this.handleLevelFailure();
             } else {
-                this.showFeedback('❌ Неправильно. Попробуйте снова.', 'error');
+                this.showWrongModal();
             }
         }
         
@@ -1854,7 +1997,6 @@ class ElectricSchemesGame {
 
     checkFormulaAnswer() {
         if (this.currentProblem.subtask === 1) {
-            // Проверка выбора формулы
             if (typeof this.selectedFormulaAnswer === 'undefined') {
                 this.showFeedback('Выберите вариант ответа!', 'error');
                 return false;
@@ -1862,7 +2004,6 @@ class ElectricSchemesGame {
             
             return this.selectedFormulaAnswer === this.currentProblem.subtask1.correctAnswer;
         } else {
-            // Проверка числового ответа
             const input = document.getElementById('numericAnswerInput');
             if (!input || input.value.trim() === '') {
                 this.showFeedback('Введите числовой ответ!', 'error');
@@ -1880,22 +2021,6 @@ class ElectricSchemesGame {
     }
 
 
-    playSuccessAnimation() {
-        document.querySelectorAll('.circuit-element').forEach(element => {
-            element.style.animation = 'correct-answer 0.5s ease';
-            setTimeout(() => {
-                element.style.animation = '';
-            }, 500);
-        });
-        
-        document.querySelectorAll('[data-type="bulb"]').forEach(bulb => {
-            bulb.classList.add('bulb-on');
-            setTimeout(() => {
-                bulb.classList.remove('bulb-on');
-            }, 1000);
-        });
-    }
-
     completeLevel() {
         const level = GameConfig.LEVELS[this.state.currentLevel];
         const levelScore = GameConfig.SCORING.LEVEL_COMPLETE * level.difficultyMultiplier;
@@ -1911,7 +2036,6 @@ class ElectricSchemesGame {
         if (this.state.currentLevel <= Object.keys(GameConfig.LEVELS).length) {
             this.showLevelCompleteModal();
         } else {
-            // Игра завершена полностью
             this.completeGame();
         }
     }
@@ -1921,9 +2045,29 @@ class ElectricSchemesGame {
         document.getElementById('levelScore').textContent = this.state.score;
         document.getElementById('correctAnswers').textContent = this.state.currentQuestion - 1;
         
-        // Форматируем время без использования GameConfig.LEVELS
         const totalSeconds = GameConfig.LEVELS[Math.min(this.state.currentLevel, Object.keys(GameConfig.LEVELS).length)].timeLimit - this.timeLeft;
         document.getElementById('levelTime').textContent = this.formatTime(totalSeconds);
+
+        if (typeof confetti === 'function') {
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+
+            setTimeout(() => {
+                confetti({
+                    particleCount: 50,
+                    spread: 100,
+                    origin: { y: 0.5, x: 0.3 }
+                });
+                confetti({
+                    particleCount: 50,
+                    spread: 100,
+                    origin: { y: 0.5, x: 0.7 }
+                });
+            }, 200);
+        }
         
         modal.style.display = 'flex';
         this.state.isPaused = true;
@@ -2031,6 +2175,7 @@ class ElectricSchemesGame {
         this.state.isPaused = !this.state.isPaused;
         
         if (this.state.isPaused) {
+            this.updatePauseModalContent(); 
             this.elements.pauseModal.style.display = 'flex';
         } else {
             this.elements.pauseModal.style.display = 'none';
@@ -2076,8 +2221,7 @@ class ElectricSchemesGame {
         this.state.selectedElement = null;
         this.selectedFormulaAnswer = undefined;
         this.selectedNumericAnswer = '';
-        
-        // Удаляем старый input, если есть
+
         const oldInput = document.getElementById('numericAnswerInput');
         if (oldInput) {
             oldInput.value = '';
@@ -2087,7 +2231,6 @@ class ElectricSchemesGame {
     }
 
     saveGameResults() {
-        // Используем Math.min, чтобы не выйти за пределы доступных уровней
         const lastCompletedLevel = Math.min(this.state.currentLevel, Object.keys(GameConfig.LEVELS).length);
         
         const result = {
@@ -2102,6 +2245,7 @@ class ElectricSchemesGame {
         GameStorage.saveResult(result);
         GameStorage.clearProgress();
     }
+
     saveGameProgress() {
         const progress = {
             currentLevel: this.state.currentLevel,
@@ -2133,14 +2277,7 @@ class ElectricSchemesGame {
                     this.removeElement(this.state.selectedElement);
                 }
                 break;
-        //     case 'r':
-        //     case 'R':
-        //         if (e.ctrlKey) {
-        //             e.preventDefault();
-        //             this.resetWorkspace();
-        //         }
-        //         break;
-         }
+        }
     }
 
     handleKeyUp(e) {
