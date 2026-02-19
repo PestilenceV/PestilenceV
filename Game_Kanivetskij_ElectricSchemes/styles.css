@@ -1122,9 +1122,6 @@ input[type="number"]::-webkit-inner-spin-button {
     margin: 0;
 }
 
-input[type="number"] {
-    -moz-appearance: textfield;
-}
 
 .element-img { width: 64px; height: 64px; }
 
@@ -1460,3 +1457,4 @@ input[type="number"] {
         padding: 5px 8px;
     }
 }
+
